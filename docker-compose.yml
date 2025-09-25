@@ -77,8 +77,6 @@ services:
       # Workaround on OSX for https://bugs.openjdk.org/browse/JDK-8345296
       - _JAVA_OPTIONS
     depends_on:
-      otel-collector:
-        condition: service_started
       flagd:
         condition: service_started
     logging: *logging
