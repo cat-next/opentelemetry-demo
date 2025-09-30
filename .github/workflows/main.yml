@@ -1,0 +1,22 @@
+name: Sync to Gitee
+
+on:
+  push:
+    branches:
+      - main   # 你要同步的分支
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0   # 关键点：获取完整历史
+      - name: Mirror to Gitee
+        run: |
+          git config --global user.name "github-actions[bot]-opentelemetry-demo-sync"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git remote add gitee https://oauth2:${{ secrets.GITEE_TOKEN }}@gitee.com/cat-next/opentelemetry-demo.git
+          git push -f gitee main
