@@ -109,7 +109,7 @@ services:
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
       - OTEL_RESOURCE_ATTRIBUTES
       - OTEL_LOGS_EXPORTER=otlp
-      - OTEL_SERVICE_NAME=ad
+      - OTEL_SERVICE_NAME=ad-cat
       - JAVA_OPTS=-Dotel.resource.attributes=service.namespace=opentelemetry-demo-cat,cat.token=otel-demo,cat.endpoints=${OTEL_COLLECTOR_HOST}
       # Workaround on OSX for https://bugs.openjdk.org/browse/JDK-8345296
       - _JAVA_OPTIONS
