@@ -8,7 +8,7 @@ WORKDIR /usr/src/app/
 
 COPY ./src/ad-catAgent/gradlew* ./src/ad-catAgent/settings.gradle* ./src/ad-catAgent/build.gradle ./
 COPY ./src/ad-catAgent/gradle ./gradle
-COPY ./cat-agent.jar ./
+COPY ./src/ad-catAgent/cat-agent.jar ./
 
 RUN chmod +x ./gradlew
 RUN ./gradlew
