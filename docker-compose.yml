@@ -74,7 +74,7 @@ services:
       - OTEL_RESOURCE_ATTRIBUTES
       - OTEL_LOGS_EXPORTER=otlp
       - OTEL_SERVICE_NAME=ad
-      - JAVA_OPTS=-Dotel.resource.attributes=service.namespace=opentelemetry-demo,cat.token=otel-demo,cat.endpoints=${OTEL_COLLECTOR_HOST}
+      - JAVA_OPTS=-Dotel.resource.attributes=service.namespace=opentelemetry-demo-cat,cat.token=otel-demo,cat.endpoints=${OTEL_COLLECTOR_HOST}
       # Workaround on OSX for https://bugs.openjdk.org/browse/JDK-8345296
       - _JAVA_OPTIONS
     depends_on:
@@ -82,6 +82,41 @@ services:
         condition: service_started
     logging: *logging
 
+  # AdService-CATAgent
+  ad-cat:
+    image: ${IMAGE_NAME}:${DEMO_VERSION}-ad-cat
+    container_name: ad-cat
+    build:
+      context: ./
+      dockerfile: ${AD_CAT_DOCKERFILE}
+      cache_from:
+        - ${IMAGE_NAME}:${IMAGE_VERSION}-ad-cat
+      args:
+        OTEL_JAVA_AGENT_VERSION: ${OTEL_JAVA_AGENT_VERSION}
+    deploy:
+      resources:
+        limits:
+          memory: 300M
+    restart: unless-stopped
+    ports:
+      - "${AD_CAT_PORT}"
+    environment:
+      - AD_PORT
+      - FLAGD_HOST
+      - FLAGD_PORT
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_GRPC}
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
+      - OTEL_RESOURCE_ATTRIBUTES
+      - OTEL_LOGS_EXPORTER=otlp
+      - OTEL_SERVICE_NAME=ad
+      - JAVA_OPTS=-Dotel.resource.attributes=service.namespace=opentelemetry-demo-cat,cat.token=otel-demo,cat.endpoints=${OTEL_COLLECTOR_HOST}
+      # Workaround on OSX for https://bugs.openjdk.org/browse/JDK-8345296
+      - _JAVA_OPTIONS
+    depends_on:
+      flagd:
+        condition: service_started
+    logging: *logging
   # Cart service
   cart:
     image: ${IMAGE_NAME}:${DEMO_VERSION}-cart
