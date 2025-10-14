@@ -40,8 +40,7 @@ services:
       - DB_CONNECTION_STRING=Host=postgresql;Username=otelu;Password=otelp;Database=otel
       - OTEL_DOTNET_AUTO_TRACES_ENTITYFRAMEWORKCORE_INSTRUMENTATION_ENABLED=false
     depends_on:
-      otel-collector:
-        condition: service_started
+      
       kafka:
         condition: service_healthy
     logging: *logging
@@ -71,11 +70,10 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_GRPC}
       - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
-      - OTEL_RESOURCE_ATTRIBUTES
+      # 针对Cat的配置，主要是申明租户信息和所属Demo
+      - OTEL_RESOURCE_ATTRIBUTES=${OTEL_RESOURCE_ATTRIBUTES}
       - OTEL_LOGS_EXPORTER=otlp
       - OTEL_SERVICE_NAME=ad
-      # 针对Cat的配置，主要是申明租户信息和所属Demo
-      - JAVA_OPTS=-Dotel.resource.attributes=service.namespace=opentelemetry-demo,cat.token=otel-demo
       # Workaround on OSX for https://bugs.openjdk.org/browse/JDK-8345296
       - _JAVA_OPTIONS
     depends_on:
@@ -140,10 +138,9 @@ services:
       - FLAGD_PORT
       - VALKEY_ADDR
       - OTEL_EXPORTER_OTLP_ENDPOINT
-      - OTEL_RESOURCE_ATTRIBUTES
+      - OTEL_RESOURCE_ATTRIBUTES=${OTEL_RESOURCE_ATTRIBUTES}
       - OTEL_SERVICE_NAME=cart
       - ASPNETCORE_URLS=http://*:${CART_PORT}
-      - OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,cat.token=otel-demo
     depends_on:
       valkey-cart:
         condition: service_started
@@ -181,7 +178,7 @@ services:
       - GOMEMLIMIT=16MiB
       - OTEL_EXPORTER_OTLP_ENDPOINT
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
-      - OTEL_RESOURCE_ATTRIBUTES
+      - OTEL_RESOURCE_ATTRIBUTES=${OTEL_RESOURCE_ATTRIBUTES}
       - OTEL_SERVICE_NAME=checkout
     depends_on:
       cart:
@@ -195,8 +192,6 @@ services:
       product-catalog:
         condition: service_started
       shipping:
-        condition: service_started
-      otel-collector:
         condition: service_started
       kafka:
         condition: service_healthy
@@ -227,9 +222,6 @@ services:
       - VERSION=${IMAGE_VERSION}
       - OTEL_EXPORTER_OTLP_ENDPOINT
       - OTEL_RESOURCE_ATTRIBUTES=${OTEL_RESOURCE_ATTRIBUTES},service.name=currency   # The C++ SDK does not support OTEL_SERVICE_NAME
-    depends_on:
-      otel-collector:
-        condition: service_started
     logging: *logging
 
   # Email service
@@ -254,11 +246,8 @@ services:
       - FLAGD_HOST
       - FLAGD_PORT
       - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_HTTP}/v1/traces
-      - OTEL_RESOURCE_ATTRIBUTES
+      - OTEL_RESOURCE_ATTRIBUTES = ${OTEL_RESOURCE_ATTRIBUTES}
       - OTEL_SERVICE_NAME=email
-    depends_on:
-      otel-collector:
-        condition: service_started
     logging: *logging
 
   # Fraud Detection service
@@ -285,11 +274,10 @@ services:
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
       - OTEL_INSTRUMENTATION_KAFKA_EXPERIMENTAL_SPAN_ATTRIBUTES=true
       - OTEL_INSTRUMENTATION_MESSAGING_EXPERIMENTAL_RECEIVE_TELEMETRY_ENABLED=true
-      - OTEL_RESOURCE_ATTRIBUTES
+      - OTEL_RESOURCE_ATTRIBUTES = ${OTEL_RESOURCE_ATTRIBUTES}
       - OTEL_SERVICE_NAME=fraud-detection
     depends_on:
-      otel-collector:
-        condition: service_started
+      
       kafka:
         condition: service_healthy
     logging: *logging
@@ -347,8 +335,7 @@ services:
         condition: service_started
       shipping:
         condition: service_started
-      otel-collector:
-        condition: service_started
+      
       image-provider:
         condition: service_started
       flagd:
@@ -384,7 +371,7 @@ services:
       - IMAGE_PROVIDER_PORT
       - OTEL_COLLECTOR_PORT_GRPC
       - OTEL_COLLECTOR_PORT_HTTP
-      - OTEL_RESOURCE_ATTRIBUTES
+      - OTEL_RESOURCE_ATTRIBUTES = ${OTEL_RESOURCE_ATTRIBUTES}
       - OTEL_SERVICE_NAME=frontend-proxy
       - ENVOY_PORT
       - FLAGD_HOST
@@ -425,10 +412,7 @@ services:
       - OTEL_COLLECTOR_HOST
       - OTEL_COLLECTOR_PORT_GRPC
       - OTEL_SERVICE_NAME=image-provider
-      - OTEL_RESOURCE_ATTRIBUTES
-    depends_on:
-      otel-collector:
-        condition: service_started
+      - OTEL_RESOURCE_ATTRIBUTES = ${OTEL_RESOURCE_ATTRIBUTES}
     logging: *logging
 
   # Load Generator
@@ -456,7 +440,7 @@ services:
       - LOCUST_BROWSER_TRAFFIC_ENABLED=true
       - OTEL_EXPORTER_OTLP_ENDPOINT
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
-      - OTEL_RESOURCE_ATTRIBUTES
+      - OTEL_RESOURCE_ATTRIBUTES = ${OTEL_RESOURCE_ATTRIBUTES}
       - OTEL_SERVICE_NAME=load-generator
       - PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
       - LOCUST_WEB_HOST=0.0.0.0
@@ -491,11 +475,10 @@ services:
       - FLAGD_PORT
       - OTEL_EXPORTER_OTLP_ENDPOINT
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
-      - OTEL_RESOURCE_ATTRIBUTES
+      - OTEL_RESOURCE_ATTRIBUTES = ${OTEL_RESOURCE_ATTRIBUTES}
       - OTEL_SERVICE_NAME=payment
     depends_on:
-      otel-collector:
-        condition: service_started
+      
       flagd:
         condition: service_started
     logging: *logging
@@ -524,13 +507,12 @@ services:
       - GOMEMLIMIT=16MiB
       - OTEL_EXPORTER_OTLP_ENDPOINT
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
-      - OTEL_RESOURCE_ATTRIBUTES
+      - OTEL_RESOURCE_ATTRIBUTES = ${OTEL_RESOURCE_ATTRIBUTES}
       - OTEL_SERVICE_NAME=product-catalog
     volumes:
       - ./src/product-catalog/products:/usr/src/app/products
     depends_on:
-      otel-collector:
-        condition: service_started
+      
       flagd:
         condition: service_started
     logging: *logging
@@ -555,12 +537,9 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_HTTP}
       - OTEL_PHP_AUTOLOAD_ENABLED=true
       - QUOTE_PORT
-      - OTEL_RESOURCE_ATTRIBUTES
+      - OTEL_RESOURCE_ATTRIBUTES = ${OTEL_RESOURCE_ATTRIBUTES}
       - OTEL_SERVICE_NAME=quote
       - OTEL_PHP_INTERNAL_METRICS_ENABLED=true
-    depends_on:
-      otel-collector:
-        condition: service_started
     logging: *logging
 
   # Recommendation service
@@ -587,13 +566,11 @@ services:
       - OTEL_PYTHON_LOG_CORRELATION=true
       - OTEL_EXPORTER_OTLP_ENDPOINT
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
-      - OTEL_RESOURCE_ATTRIBUTES
+      - OTEL_RESOURCE_ATTRIBUTES = ${OTEL_RESOURCE_ATTRIBUTES}
       - OTEL_SERVICE_NAME=recommendation
       - PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
     depends_on:
       product-catalog:
-        condition: service_started
-      otel-collector:
         condition: service_started
       flagd:
         condition: service_started
@@ -619,18 +596,15 @@ services:
       - SHIPPING_PORT
       - QUOTE_ADDR
       - OTEL_EXPORTER_OTLP_ENDPOINT
-      - OTEL_RESOURCE_ATTRIBUTES
+      - OTEL_RESOURCE_ATTRIBUTES = ${OTEL_RESOURCE_ATTRIBUTES}
       - OTEL_SERVICE_NAME=shipping
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
     healthcheck:
-      test: ["CMD-SHELL", "timeout 1 bash -c '>/dev/tcp/localhost/${SHIPPING_PORT}'"]
+      test: [ "CMD-SHELL", "timeout 1 bash -c '>/dev/tcp/localhost/${SHIPPING_PORT}'" ]
       start_period: 10s
       interval: 5s
       timeout: 10s
       retries: 10
-    depends_on:
-      otel-collector:
-        condition: service_started
     logging: *logging
 
   # ******************
@@ -649,7 +623,7 @@ services:
       - FLAGD_OTEL_COLLECTOR_URI=${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_GRPC}
       - FLAGD_METRICS_EXPORTER=otel
       - GOMEMLIMIT=60MiB
-      - OTEL_RESOURCE_ATTRIBUTES
+      - OTEL_RESOURCE_ATTRIBUTES = ${OTEL_RESOURCE_ATTRIBUTES}
       - OTEL_SERVICE_NAME=flagd
     command: [
       "start",
@@ -679,15 +653,14 @@ services:
     environment:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_HTTP}
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
-      - OTEL_RESOURCE_ATTRIBUTES
+      - OTEL_RESOURCE_ATTRIBUTES = ${OTEL_RESOURCE_ATTRIBUTES}
       - OTEL_SERVICE_NAME=flagd-ui
       - SECRET_KEY_BASE=yYrECL4qbNwleYInGJYvVnSkwJuSQJ4ijPTx5tirGUXrbznFIBFVJdPl5t6O9ASw
       - PHX_HOST=localhost
     ports:
       - "${FLAGD_UI_PORT}"
     depends_on:
-      otel-collector:
-        condition: service_started
+      
       flagd:
         condition: service_started
     volumes:
@@ -715,7 +688,7 @@ services:
       - KAFKA_CONTROLLER_QUORUM_VOTERS=1@${KAFKA_HOST}:9093
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_HTTP}
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
-      - OTEL_RESOURCE_ATTRIBUTES
+      - OTEL_RESOURCE_ATTRIBUTES = ${OTEL_RESOURCE_ATTRIBUTES}
       - OTEL_SERVICE_NAME=kafka
       - KAFKA_HEAP_OPTS=-Xmx400m -Xms400m
       # Workaround on OSX for https://bugs.openjdk.org/browse/JDK-8345296
