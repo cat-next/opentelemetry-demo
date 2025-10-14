@@ -246,7 +246,7 @@ services:
       - FLAGD_HOST
       - FLAGD_PORT
       - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_HTTP}/v1/traces
-      - OTEL_RESOURCE_ATTRIBUTES = service.namespace=opentelemetry-demo,cat.token=otel-demo
+      - OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,cat.token=otel-demo
       - OTEL_SERVICE_NAME=email
     logging: *logging
 
@@ -274,7 +274,7 @@ services:
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
       - OTEL_INSTRUMENTATION_KAFKA_EXPERIMENTAL_SPAN_ATTRIBUTES=true
       - OTEL_INSTRUMENTATION_MESSAGING_EXPERIMENTAL_RECEIVE_TELEMETRY_ENABLED=true
-      - OTEL_RESOURCE_ATTRIBUTES = service.namespace=opentelemetry-demo,cat.token=otel-demo
+      - OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,cat.token=otel-demo
       - OTEL_SERVICE_NAME=fraud-detection
     depends_on:
       
@@ -371,7 +371,7 @@ services:
       - IMAGE_PROVIDER_PORT
       - OTEL_COLLECTOR_PORT_GRPC
       - OTEL_COLLECTOR_PORT_HTTP
-      - OTEL_RESOURCE_ATTRIBUTES = service.namespace=opentelemetry-demo,cat.token=otel-demo
+      - OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,cat.token=otel-demo
       - OTEL_SERVICE_NAME=frontend-proxy
       - ENVOY_PORT
       - FLAGD_HOST
@@ -412,7 +412,7 @@ services:
       - OTEL_COLLECTOR_HOST
       - OTEL_COLLECTOR_PORT_GRPC
       - OTEL_SERVICE_NAME=image-provider
-      - OTEL_RESOURCE_ATTRIBUTES = service.namespace=opentelemetry-demo,cat.token=otel-demo
+      - OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,cat.token=otel-demo
     logging: *logging
 
   # Load Generator
@@ -440,7 +440,7 @@ services:
       - LOCUST_BROWSER_TRAFFIC_ENABLED=true
       - OTEL_EXPORTER_OTLP_ENDPOINT
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
-      - OTEL_RESOURCE_ATTRIBUTES = service.namespace=opentelemetry-demo,cat.token=otel-demo
+      - OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,cat.token=otel-demo
       - OTEL_SERVICE_NAME=load-generator
       - PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
       - LOCUST_WEB_HOST=0.0.0.0
@@ -475,7 +475,7 @@ services:
       - FLAGD_PORT
       - OTEL_EXPORTER_OTLP_ENDPOINT
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
-      - OTEL_RESOURCE_ATTRIBUTES = service.namespace=opentelemetry-demo,cat.token=otel-demo
+      - OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,cat.token=otel-demo
       - OTEL_SERVICE_NAME=payment
     depends_on:
       
@@ -507,7 +507,7 @@ services:
       - GOMEMLIMIT=16MiB
       - OTEL_EXPORTER_OTLP_ENDPOINT
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
-      - OTEL_RESOURCE_ATTRIBUTES = service.namespace=opentelemetry-demo,cat.token=otel-demo
+      - OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,cat.token=otel-demo
       - OTEL_SERVICE_NAME=product-catalog
     volumes:
       - ./src/product-catalog/products:/usr/src/app/products
@@ -537,7 +537,7 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_HTTP}
       - OTEL_PHP_AUTOLOAD_ENABLED=true
       - QUOTE_PORT
-      - OTEL_RESOURCE_ATTRIBUTES = service.namespace=opentelemetry-demo,cat.token=otel-demo
+      - OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,cat.token=otel-demo
       - OTEL_SERVICE_NAME=quote
       - OTEL_PHP_INTERNAL_METRICS_ENABLED=true
     logging: *logging
@@ -566,7 +566,7 @@ services:
       - OTEL_PYTHON_LOG_CORRELATION=true
       - OTEL_EXPORTER_OTLP_ENDPOINT
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
-      - OTEL_RESOURCE_ATTRIBUTES = service.namespace=opentelemetry-demo,cat.token=otel-demo
+      - OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,cat.token=otel-demo
       - OTEL_SERVICE_NAME=recommendation
       - PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
     depends_on:
@@ -596,7 +596,7 @@ services:
       - SHIPPING_PORT
       - QUOTE_ADDR
       - OTEL_EXPORTER_OTLP_ENDPOINT
-      - OTEL_RESOURCE_ATTRIBUTES = service.namespace=opentelemetry-demo,cat.token=otel-demo
+      - OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,cat.token=otel-demo
       - OTEL_SERVICE_NAME=shipping
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
     healthcheck:
@@ -623,7 +623,7 @@ services:
       - FLAGD_OTEL_COLLECTOR_URI=${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_GRPC}
       - FLAGD_METRICS_EXPORTER=otel
       - GOMEMLIMIT=60MiB
-      - OTEL_RESOURCE_ATTRIBUTES = service.namespace=opentelemetry-demo,cat.token=otel-demo
+      - OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,cat.token=otel-demo
       - OTEL_SERVICE_NAME=flagd
     command: [
       "start",
@@ -653,7 +653,7 @@ services:
     environment:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_HTTP}
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
-      - OTEL_RESOURCE_ATTRIBUTES = service.namespace=opentelemetry-demo,cat.token=otel-demo
+      - OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,cat.token=otel-demo
       - OTEL_SERVICE_NAME=flagd-ui
       - SECRET_KEY_BASE=yYrECL4qbNwleYInGJYvVnSkwJuSQJ4ijPTx5tirGUXrbznFIBFVJdPl5t6O9ASw
       - PHX_HOST=localhost
@@ -688,7 +688,7 @@ services:
       - KAFKA_CONTROLLER_QUORUM_VOTERS=1@${KAFKA_HOST}:9093
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://${OTEL_COLLECTOR_HOST}:${OTEL_COLLECTOR_PORT_HTTP}
       - OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
-      - OTEL_RESOURCE_ATTRIBUTES = service.namespace=opentelemetry-demo,cat.token=otel-demo
+      - OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,cat.token=otel-demo
       - OTEL_SERVICE_NAME=kafka
       - KAFKA_HEAP_OPTS=-Xmx400m -Xms400m
       # Workaround on OSX for https://bugs.openjdk.org/browse/JDK-8345296
