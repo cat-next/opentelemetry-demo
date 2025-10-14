@@ -74,7 +74,8 @@ services:
       - OTEL_RESOURCE_ATTRIBUTES
       - OTEL_LOGS_EXPORTER=otlp
       - OTEL_SERVICE_NAME=ad
-      - JAVA_OPTS=-Dotel.resource.attributes=service.namespace=opentelemetry-demo,cat.token=otel-demo,cat.endpoints=${OTEL_COLLECTOR_HOST}
+      # 针对Cat的配置，主要是申明租户信息和所属Demo
+      - JAVA_OPTS=-Dotel.resource.attributes=service.namespace=opentelemetry-demo,cat.token=otel-demo
       # Workaround on OSX for https://bugs.openjdk.org/browse/JDK-8345296
       - _JAVA_OPTIONS
     depends_on:
@@ -142,10 +143,9 @@ services:
       - OTEL_RESOURCE_ATTRIBUTES
       - OTEL_SERVICE_NAME=cart
       - ASPNETCORE_URLS=http://*:${CART_PORT}
+      - OTEL_RESOURCE_ATTRIBUTES=service.namespace=opentelemetry-demo,cat.token=otel-demo
     depends_on:
       valkey-cart:
-        condition: service_started
-      otel-collector:
         condition: service_started
       flagd:
         condition: service_started
